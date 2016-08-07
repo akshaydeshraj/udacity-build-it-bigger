@@ -12,6 +12,16 @@ android {
         versionName "1.0"
         multiDexEnabled true
     }
+
+    productFlavors {
+        free {
+            applicationId "com.udacity.gradle.builditbigger.free"
+        }
+        paid {
+            applicationId "com.udacity.gradle.builditbigger"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -22,11 +32,23 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    // Added for AdMob
+
     compile project(':jokes')
     compile project(':displaylibrary')
     compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.google.android.gms:play-services:9.4.0'
+
+    // Added for AdMob
+    freeCompile 'com.google.android.gms:play-services-ads:9.4.0'
+
+    //Cloud
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile project(path: ':backend', configuration: 'android-endpoints')
+
+    //Testing
+    androidTestCompile('com.android.support.test:runner:0.5', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestCompile('com.android.support.test:rules:0.5', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 }
