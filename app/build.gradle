@@ -11,6 +11,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     productFlavors {
@@ -27,6 +29,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -49,6 +59,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     androidTestCompile('com.android.support.test:rules:0.5', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
