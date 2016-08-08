@@ -19,6 +19,7 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     private static JokesApi myApiService = null;
     private JokeFetchListener mListener;
+    private Exception mException;
 
     EndpointsAsyncTask(JokeFetchListener listener) {
         this.mListener = listener;
@@ -49,12 +50,13 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         try {
             return myApiService.getJoke().execute().getData();
         } catch (IOException e) {
+            mException = e;
             return e.getMessage();
         }
     }
 
     @Override
     protected void onPostExecute(String result) {
-        mListener.onJokeFetched(result);
+        mListener.onJokeFetched(result, mException);
     }
 }

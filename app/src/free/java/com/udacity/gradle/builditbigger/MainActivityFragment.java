@@ -67,7 +67,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void onJokeFetched(String joke) {
+    public void onJokeFetched(String joke, Exception e) {
         progressBar.setVisibility(View.GONE);
         startActivity(JokeDisplayActivity.getJokeDisplayActivityIntent(getActivity(), joke));
     }
