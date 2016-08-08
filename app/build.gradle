@@ -25,7 +25,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "SERVER_URL", "\"https://build-it-bigger-1470576893982.appspot.com/_ah/api/\""
+        }
+
         release {
+            buildConfigField "String", "SERVER_URL", "\"https://build-it-bigger-1470576893982.appspot.com/_ah/api/\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

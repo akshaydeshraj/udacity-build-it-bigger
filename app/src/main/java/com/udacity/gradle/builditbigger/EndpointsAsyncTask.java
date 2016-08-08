@@ -1,12 +1,12 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
-import com.axay.displaylibrary.JokeDisplayActivity;
 import com.axay.jokes.backend.jokesApi.JokesApi;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 
@@ -18,18 +18,29 @@ import java.io.IOException;
 class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     private static JokesApi myApiService = null;
-    private Context mContext;
+    private JokeFetchListener mListener;
 
-    public EndpointsAsyncTask(Context mContext) {
-        this.mContext = mContext;
+    EndpointsAsyncTask(JokeFetchListener listener) {
+        this.mListener = listener;
     }
 
     @Override
     protected String doInBackground(Void... arg0) {
+
         if (myApiService == null) {  // Only do this once
+
             JokesApi.Builder builder = new JokesApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
-                    .setRootUrl("https://build-it-bigger-1470576893982.appspot.com/_ah/api/");
+                    .setRootUrl(BuildConfig.SERVER_URL);
+
+            if (BuildConfig.DEBUG) {
+                builder.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                    @Override
+                    public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                        abstractGoogleClientRequest.setDisableGZipContent(true);
+                    }
+                });
+            }
 
             myApiService = builder.build();
         }
@@ -44,6 +55,6 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        mContext.startActivity(JokeDisplayActivity.getJokeDisplayActivityIntent(mContext, result));
+        mListener.onJokeFetched(result);
     }
 }
