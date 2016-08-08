@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.axay.displaylibrary.JokeDisplayActivity;
 import com.google.android.gms.ads.AdListener;
@@ -23,6 +24,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     AdRequest adRequest;
 
     Button btnJoke;
+    ProgressBar progressBar;
 
     public MainActivityFragment() {
     }
@@ -33,6 +35,8 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         btnJoke = (Button) root.findViewById(R.id.btn_joke);
         btnJoke.setOnClickListener(this);
+
+        progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
 
         mInterstitialAd = new InterstitialAd(getActivity());
         mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
@@ -64,6 +68,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onJokeFetched(String joke) {
+        progressBar.setVisibility(View.GONE);
         startActivity(JokeDisplayActivity.getJokeDisplayActivityIntent(getActivity(), joke));
     }
 
@@ -79,6 +84,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     }
 
     private void fetchJoke() {
+        progressBar.setVisibility(View.VISIBLE);
         new EndpointsAsyncTask(this).execute();
     }
 }

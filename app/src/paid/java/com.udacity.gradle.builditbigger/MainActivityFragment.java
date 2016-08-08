@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.axay.displaylibrary.JokeDisplayActivity;
 
@@ -14,6 +15,8 @@ import com.axay.displaylibrary.JokeDisplayActivity;
  */
 public class MainActivityFragment extends Fragment implements View.OnClickListener, JokeFetchListener {
 
+    ProgressBar progressBar;
+
     public MainActivityFragment() {
     }
 
@@ -21,8 +24,12 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+
         Button btnJoke = (Button) root.findViewById(R.id.btn_joke);
         btnJoke.setOnClickListener(this);
+
+        progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
+
         return root;
     }
 
@@ -37,10 +44,12 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onJokeFetched(String joke) {
+        progressBar.setVisibility(View.GONE);
         startActivity(JokeDisplayActivity.getJokeDisplayActivityIntent(getActivity(), joke));
     }
 
     private void fetchJoke() {
+        progressBar.setVisibility(View.VISIBLE);
         new EndpointsAsyncTask(this).execute();
     }
 }
